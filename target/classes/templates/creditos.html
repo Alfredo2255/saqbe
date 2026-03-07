@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SAQ B'E — Créditos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+            --jade:#2D6A4F; --jade-dark:#1B4332; --gold:#D4A017; --gold-light:#F2CC60;
+            --terracota:#A0522D; --cream:#FAF3E0; --cream-dark:#EDE0C4;
+            --negro:#1A1108; --sombra:rgba(26,17,8,0.13);
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--cream);color:var(--negro);font-family:'Crimson Pro',Georgia,serif;min-height:100vh;}
+        body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 10% 10%,rgba(45,106,79,0.07) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 90% 90%,rgba(160,82,45,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
+
+        /* HEADER */
+        header{background:var(--jade-dark);position:relative;}
+        .hborder{height:7px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 12px,var(--jade) 12px,var(--jade) 24px,var(--terracota) 24px,var(--terracota) 36px,var(--jade) 36px,var(--jade) 48px);}
+        .hcontent{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;flex-wrap:wrap;gap:12px;}
+        .logo-area{display:flex;align-items:center;gap:14px;}
+        .logo-gem{width:52px;height:52px;border:2.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+        .logo-gem span{transform:rotate(-45deg);display:block;}
+        h1{font-family:'Cinzel Decorative',serif;font-size:1.55rem;font-weight:900;color:var(--cream);letter-spacing:3px;line-height:1.2;}
+        h1 em{display:block;font-style:normal;font-size:0.58rem;font-family:'Crimson Pro',serif;font-weight:300;letter-spacing:6px;color:var(--gold-light);text-transform:uppercase;margin-top:3px;}
+        .hbtns{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+        .btn{display:inline-flex;align-items:center;gap:7px;text-decoration:none;padding:10px 20px;font-family:'Crimson Pro',serif;font-size:0.85rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.25s;white-space:nowrap;}
+        .btn-back{background:transparent;color:var(--gold-light);border:1.5px solid var(--gold);}
+        .btn-back:hover{background:rgba(212,160,23,0.15);color:white;}
+
+        /* MAIN */
+        main{position:relative;z-index:1;padding:48px 40px;max-width:1000px;margin:0 auto;}
+
+        /* TÍTULO SECCIÓN */
+        .page-title{text-align:center;margin-bottom:48px;}
+        .page-title h2{font-family:'Cinzel Decorative',serif;font-size:2rem;color:var(--jade-dark);letter-spacing:4px;margin-bottom:8px;}
+        .page-title p{color:#888;font-size:1rem;letter-spacing:2px;font-style:italic;}
+        .ornamento{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0;}
+        .ornamento span{color:var(--gold);font-size:1.2rem;}
+        .ornamento::before,.ornamento::after{content:'';flex:1;max-width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+        .ornamento::after{background:linear-gradient(90deg,var(--gold),transparent);}
+
+        /* CARDS DEL EQUIPO */
+        .equipo{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-bottom:60px;}
+        .miembro{background:white;border:1px solid var(--cream-dark);width:260px;text-align:center;padding:36px 24px 28px;box-shadow:0 4px 20px var(--sombra);position:relative;transition:all 0.3s;}
+        .miembro::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--jade),var(--gold),var(--terracota));transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
+        .miembro:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(26,17,8,0.18);}
+        .miembro:hover::before{transform:scaleX(1);}
+        .avatar-wrap{position:relative;width:110px;height:110px;margin:0 auto 20px;}
+        .avatar-wrap::before{content:'';position:absolute;inset:-5px;border:2px solid var(--gold);transform:rotate(45deg);z-index:0;}
+        .avatar{width:110px;height:110px;border-radius:50%;object-fit:cover;position:relative;z-index:1;border:3px solid white;}
+        .avatar-initial{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--jade),var(--jade-dark));display:flex;align-items:center;justify-content:center;font-family:'Cinzel Decorative',serif;font-size:2rem;color:var(--gold);position:relative;z-index:1;border:3px solid white;}
+        .nombre{font-family:'Cinzel Decorative',serif;font-size:0.9rem;color:var(--jade-dark);letter-spacing:2px;margin-bottom:6px;line-height:1.4;}
+        .rol{font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+        .separador{width:40px;height:2px;background:linear-gradient(90deg,transparent,var(--terracota),transparent);margin:0 auto 12px;}
+        .bio{font-size:0.88rem;color:#777;font-style:italic;line-height:1.6;}
+        .numero{position:absolute;top:14px;right:16px;font-family:'Cinzel Decorative',serif;font-size:0.7rem;color:var(--cream-dark);letter-spacing:2px;}
+
+        /* SECCIÓN PROYECTO */
+        .proyecto-info{background:white;border:1px solid var(--cream-dark);padding:36px 44px;box-shadow:0 4px 20px var(--sombra);border-top:4px solid var(--jade);margin-bottom:40px;}
+        .proyecto-info h3{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--jade-dark);letter-spacing:3px;margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+        .proyecto-info h3::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--jade),transparent);}
+        .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+        .info-item label{font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:#bbb;display:block;margin-bottom:4px;}
+        .info-item span{font-size:1rem;color:var(--negro);}
+        .info-item strong{color:var(--jade-dark);font-weight:600;}
+        .tech-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+        .badge{background:var(--jade-dark);color:var(--gold-light);padding:4px 12px;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;font-family:'Crimson Pro',serif;}
+        .badge.gold{background:var(--gold);color:var(--negro);}
+        .badge.terra{background:var(--terracota);color:white;}
+
+        footer{text-align:center;padding:28px;color:#aaa;font-size:0.75rem;letter-spacing:2px;border-top:1px solid var(--cream-dark);margin-top:24px;}
+        footer strong{color:var(--jade);}
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="hborder"></div>
+    <div class="hcontent">
+        <div class="logo-area">
+            <div class="logo-gem"><span>✦</span></div>
+            <h1>SAQ B'E <em>Sistema de Inventario</em></h1>
+        </div>
+        <div class="hbtns">
+            <a href="/recursos" class="btn btn-back">← Volver al Inventario</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="page-title">
+        <h2>Créditos</h2>
+        <div class="ornamento"><span>✦</span></div>
+        <p>Equipo de desarrollo — Proyecto SAQ B'E</p>
+    </div>
+
+    <!-- EQUIPO -->
+    <div class="equipo">
+
+        <div class="miembro">
+            <div class="numero">01</div>
+            <div class="avatar-wrap">
+                <img class="avatar" th:src="@{/brandon.png}" alt="Brandon Gonzales"/>
+            </div>
+            <div class="nombre">Brandon<br>Gonzales</div>
+            <div class="rol">Desarrollador</div>
+            <div class="separador"></div>
+            <div class="bio">Desarrollo backend, arquitectura del sistema y gestión de la base de datos.</div>
+        </div>
+
+        <div class="miembro">
+            <div class="numero">02</div>
+            <div class="avatar-wrap">
+                <img class="avatar" th:src="@{/alfredo.png}" alt="Alfredo Hernández"/>
+            </div>
+            <div class="nombre">Alfredo<br>Hernández</div>
+            <div class="rol">Desarrollador</div>
+            <div class="separador"></div>
+            <div class="bio">Lógica de negocio, controladores REST y módulo de historial de movimientos.</div>
+        </div>
+
+        <div class="miembro">
+            <div class="numero">03</div>
+            <div class="avatar-wrap">
+                <img class="avatar" th:src="@{/helen.png}" alt="Helen Romero"/>
+            </div>
+            <div class="nombre">Helen<br>Romero</div>
+            <div class="rol">Diseñadora / Dev</div>
+            <div class="separador"></div>
+            <div class="bio">Diseño UI/UX, maquetación de plantillas Thymeleaf e identidad visual del sistema.</div>
+        </div>
+
+    </div>
+
+
+</main>
+
+<footer>
+    SAQ B'E © 2026 — Desarrollado por <strong>Brandon Gonzales</strong>, <strong>Alfredo Hernández</strong> y <strong>Helen Romero</strong>
+</footer>
+
+</body>
+</html>

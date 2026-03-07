@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SAQ B'E — Historial Completo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
+    <style>
+        :root{--jade:#2D6A4F;--jade-dark:#1B4332;--gold:#D4A017;--gold-light:#F2CC60;--terracota:#A0522D;--cream:#FAF3E0;--cream-dark:#EDE0C4;--negro:#1A1108;--sombra:rgba(26,17,8,0.12);}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--cream);color:var(--negro);font-family:'Crimson Pro',Georgia,serif;min-height:100vh;}
+        body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 5% 5%,rgba(45,106,79,0.07) 0%,transparent 60%);pointer-events:none;z-index:0;}
+
+        header{background:var(--jade-dark);}
+        .hborder{height:7px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 12px,var(--jade) 12px,var(--jade) 24px,var(--terracota) 24px,var(--terracota) 36px,var(--jade) 36px,var(--jade) 48px);}
+        .hcontent{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;flex-wrap:wrap;gap:12px;}
+        h1{font-family:'Cinzel Decorative',serif;font-size:1.4rem;color:var(--cream);letter-spacing:3px;}
+        h1 em{display:block;font-style:normal;font-size:0.58rem;font-family:'Crimson Pro',serif;font-weight:300;letter-spacing:6px;color:var(--gold-light);margin-top:3px;}
+        .hbtns{display:flex;gap:10px;flex-wrap:wrap;}
+        .btn{display:inline-flex;align-items:center;gap:7px;text-decoration:none;padding:10px 20px;font-family:'Crimson Pro',serif;font-size:0.84rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.22s;white-space:nowrap;}
+        .btn-volver{color:var(--gold-light);border:1.5px solid var(--gold);background:transparent;}
+        .btn-volver:hover{background:rgba(212,160,23,0.12);color:white;}
+        .btn-print{color:#aed9c5;border:1.5px solid #aed9c5;background:transparent;}
+        .btn-print:hover{background:rgba(174,217,197,0.12);color:white;}
+
+        main{position:relative;z-index:1;padding:28px 40px;max-width:1100px;margin:0 auto;}
+
+        /* HERO HISTORIAL */
+        .hist-hero{background:linear-gradient(135deg,var(--jade-dark),#0a2e1f);padding:28px 32px;margin-bottom:28px;position:relative;overflow:hidden;}
+        .hist-hero::after{content:'📋';position:absolute;right:24px;bottom:-10px;font-size:80px;opacity:0.08;}
+        .hist-hero h2{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold-light);letter-spacing:4px;margin-bottom:8px;}
+        .hist-hero p{color:#aed9c5;font-size:0.92rem;max-width:500px;line-height:1.6;}
+
+        /* STATS */
+        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+        .sc{background:white;border:1px solid var(--cream-dark);padding:16px 18px;box-shadow:0 2px 8px var(--sombra);border-top:4px solid var(--jade);}
+        .sc:nth-child(2){border-top-color:var(--gold);}
+        .sc:nth-child(3){border-top-color:var(--terracota);}
+        .sc:nth-child(4){border-top-color:#e74c3c;}
+        .sl{font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:#999;}
+        .sv{font-family:'Cinzel Decorative',serif;font-size:2rem;color:var(--jade-dark);margin-top:2px;}
+        .sc:nth-child(2) .sv{color:var(--gold);}
+        .sc:nth-child(3) .sv{color:var(--terracota);}
+        .sc:nth-child(4) .sv{color:#e74c3c;}
+
+        /* BUSCADOR */
+        .toolbar{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap;align-items:center;}
+        .search-box{flex:1;min-width:200px;position:relative;}
+        .search-box input{width:100%;padding:10px 16px 10px 40px;border:1.5px solid var(--cream-dark);background:white;font-family:'Crimson Pro',serif;font-size:0.95rem;outline:none;transition:border 0.2s;}
+        .search-box input:focus{border-color:var(--jade);}
+        .search-box::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:0.85rem;}
+        .fbtn{padding:10px 16px;border:1.5px solid var(--cream-dark);background:white;font-family:'Crimson Pro',serif;font-size:0.78rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+        .fbtn:hover{border-color:var(--jade);color:var(--jade);}
+        .fbtn.on{background:var(--jade);color:white;border-color:var(--jade);}
+        .fbtn[data-f="EDITADO"].on{background:var(--gold);border-color:var(--gold);color:var(--negro);}
+        .fbtn[data-f="ELIMINADO"].on{background:var(--terracota);border-color:var(--terracota);color:white;}
+
+        /* TABLA */
+        .twrap{background:white;border:1px solid var(--cream-dark);box-shadow:0 4px 16px var(--sombra);overflow:hidden;}
+        .thead-bar{padding:14px 22px;background:var(--jade-dark);display:flex;align-items:center;justify-content:space-between;}
+        .thead-title{font-family:'Cinzel Decorative',serif;font-size:0.78rem;letter-spacing:3px;color:var(--gold-light);}
+        .thead-count{color:#aed9c5;font-size:0.75rem;letter-spacing:1.5px;}
+        table{width:100%;border-collapse:collapse;}
+        thead{background:var(--cream);}
+        th{padding:11px 14px;text-align:left;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:#999;font-weight:600;border-bottom:2px solid var(--cream-dark);}
+        td{padding:12px 14px;border-bottom:1px solid var(--cream-dark);font-size:0.9rem;vertical-align:top;}
+        tr:last-child td{border-bottom:none;}
+        tr.fila-data:hover td{background:rgba(45,106,79,0.03);}
+
+        /* LÍNEA DE TIEMPO visual */
+        .tl-wrap{position:relative;}
+        .tl-wrap td:first-child{position:relative;}
+
+        .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;font-size:0.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;}
+        .b-CREADO{background:#e8f5e9;color:#1B4332;}
+        .b-EDITADO{background:#fff8e1;color:#856000;}
+        .b-ELIMINADO{background:#fce4ec;color:#b71c1c;}
+
+        .pnombre{font-family:'Cinzel Decorative',serif;font-size:0.76rem;color:var(--jade-dark);}
+        .pid{font-size:0.62rem;color:#bbb;letter-spacing:2px;margin-top:2px;}
+        .det{color:#555;font-style:italic;font-size:0.86rem;line-height:1.5;}
+        .fecha{color:#999;font-size:0.78rem;white-space:nowrap;}
+        .stock-wrap{display:flex;align-items:center;gap:6px;font-size:0.82rem;}
+        .s-antes{color:#bbb;text-decoration:line-through;}
+        .s-arrow{color:#ccc;font-size:0.7rem;}
+        .s-nuevo{color:var(--jade);font-weight:700;}
+        .s-bajo{color:var(--terracota);font-weight:700;}
+        .s-cero{color:#c62828;font-weight:700;}
+
+        /* Línea de tiempo lateral */
+        .tl-dot{width:10px;height:10px;border-radius:50%;margin-top:4px;}
+        .dot-CREADO{background:#2D6A4F;}
+        .dot-EDITADO{background:#D4A017;}
+        .dot-ELIMINADO{background:#A0522D;}
+
+        .nodata{text-align:center;padding:60px;color:#ccc;}
+        .nodata-icon{font-size:48px;margin-bottom:12px;opacity:0.4;}
+
+        footer{text-align:center;padding:20px;color:#aaa;font-size:0.72rem;letter-spacing:2px;border-top:1px solid var(--cream-dark);margin-top:40px;}
+
+        @media(max-width:700px){
+            .stats{grid-template-columns:repeat(2,1fr);}
+            table thead th:nth-child(4),table td:nth-child(4){display:none;}
+            main{padding:16px 18px;}
+            .hcontent{padding:14px 18px;}
+        }
+
+        @media print{
+            body::before,.hborder,.hbtns,.toolbar{display:none!important;}
+            header{background:var(--jade-dark)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+            .hist-hero{background:var(--jade-dark)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+            .badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+            .thead-bar{background:var(--jade-dark)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+            .twrap{box-shadow:none;border:1px solid #ccc;}
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="hborder"></div>
+    <div class="hcontent">
+        <h1>SAQ B'E <em>Historial Completo de Actividad</em></h1>
+        <div class="hbtns">
+            <button onclick="window.print()" class="btn btn-print">🖨️ Imprimir Historial</button>
+            <a href="/recursos" class="btn btn-volver">← Volver al Inventario</a>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <div class="hist-hero">
+        <h2>Todo queda guardado automáticamente</h2>
+        <p>Cada vez que agregas, editas o eliminas un producto, el sistema lo registra aquí con fecha y hora exacta. Esta información no se borra aunque apagues la computadora.</p>
+    </div>
+
+    <div class="stats">
+        <div class="sc">
+            <div class="sl">Total Movimientos</div>
+            <div class="sv" th:text="${totalAcciones}">0</div>
+        </div>
+        <div class="sc">
+            <div class="sl">Creados</div>
+            <div class="sv" th:text="${creados}">0</div>
+        </div>
+        <div class="sc">
+            <div class="sl">Editados</div>
+            <div class="sv" th:text="${editados}">0</div>
+        </div>
+        <div class="sc">
+            <div class="sl">Eliminados</div>
+            <div class="sv" th:text="${eliminados}">0</div>
+        </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <div class="search-box">
+            <input type="text" id="buscador" placeholder="Buscar por producto o detalle..." oninput="buscar(this.value)"/>
+        </div>
+        <button class="fbtn on" data-f="TODOS" onclick="filtrar(this)">Todos</button>
+        <button class="fbtn" data-f="CREADO" onclick="filtrar(this)">✅ Creados</button>
+        <button class="fbtn" data-f="EDITADO" onclick="filtrar(this)">✏️ Editados</button>
+        <button class="fbtn" data-f="ELIMINADO" onclick="filtrar(this)">🗑 Eliminados</button>
+    </div>
+
+    <div class="twrap">
+        <div class="thead-bar">
+            <span class="thead-title">Registro de Movimientos</span>
+            <span class="thead-count" id="contadorVisible" th:text="'Mostrando ' + ${totalAcciones} + ' registros'"></span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Acción</th>
+                    <th>Producto</th>
+                    <th>Detalle del Cambio</th>
+                    <th>Stock</th>
+                    <th>Fecha y Hora</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                <tr th:if="${#lists.isEmpty(registros)}">
+                    <td colspan="6" class="nodata">
+                        <div class="nodata-icon">📭</div>
+                        <p>No hay movimientos todavía. Agrega tu primer producto.</p>
+                    </td>
+                </tr>
+                <tr class="fila-data" th:each="r : ${registros}"
+                    th:attr="data-accion=${r.accion},data-texto=${r.productoNombre + ' ' + r.detalle}">
+                    <td style="width:20px;padding-left:20px;">
+                        <div class="tl-dot" th:classappend="'dot-' + ${r.accion}"></div>
+                    </td>
+                    <td>
+                        <span class="badge" th:classappend="'b-' + ${r.accion}">
+                            <span th:text="${r.accion == 'CREADO' ? '✅' : (r.accion == 'EDITADO' ? '✏️' : '🗑')}"></span>
+                            <span th:text="${r.accion}"></span>
+                        </span>
+                    </td>
+                    <td>
+                        <div class="pnombre" th:text="${r.productoNombre}"></div>
+                        <div class="pid" th:text="'Producto #' + ${r.productoId}"></div>
+                    </td>
+                    <td class="det" th:text="${r.detalle}"></td>
+                    <td>
+                        <div class="stock-wrap">
+                            <span class="s-antes" th:if="${r.stockAnterior != null}" th:text="${r.stockAnterior}"></span>
+                            <span class="s-arrow" th:if="${r.stockAnterior != null}">▶</span>
+                            <span th:classappend="${r.stockNuevo != null and r.stockNuevo == 0 ? 's-cero' : (r.stockNuevo != null and r.stockNuevo < 5 ? 's-bajo' : 's-nuevo')}"
+                                  th:text="${r.stockNuevo != null ? r.stockNuevo + ' uds.' : '—'}"></span>
+                        </div>
+                    </td>
+                    <td class="fecha" th:text="${r.fechaFormateada}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer>SAQ B'E © 2024 — Los datos se guardan permanentemente en tu computadora local</footer>
+
+<script>
+let filtroActual = 'TODOS';
+let busquedaActual = '';
+
+function filtrar(btn) {
+    document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    filtroActual = btn.getAttribute('data-f');
+    aplicar();
+}
+
+function buscar(txt) {
+    busquedaActual = txt.toLowerCase();
+    aplicar();
+}
+
+function aplicar() {
+    const filas = document.querySelectorAll('#tbody tr.fila-data');
+    let vis = 0;
+    filas.forEach(fila => {
+        const accion = fila.getAttribute('data-accion');
+        const texto = fila.getAttribute('data-texto').toLowerCase();
+        const pasa = (filtroActual === 'TODOS' || accion === filtroActual)
+                  && (busquedaActual === '' || texto.includes(busquedaActual));
+        fila.style.display = pasa ? '' : 'none';
+        if(pasa) vis++;
+    });
+    document.getElementById('contadorVisible').textContent = 'Mostrando ' + vis + ' registros';
+}
+</script>
+
+</body>
+</html>
