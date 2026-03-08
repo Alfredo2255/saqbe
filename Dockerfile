@@ -14,7 +14,7 @@ COPY src ./src
 RUN mvn -B package -DskipTests
 
 # Etapa de ejecución: imagen más liviana con JRE/JDK 17
-FROM openjdk:17-jdk
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copiar el jar generado desde la etapa de build
