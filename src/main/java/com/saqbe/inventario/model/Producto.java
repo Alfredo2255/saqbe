@@ -1,6 +1,8 @@
 package com.saqbe.inventario.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.VarbinaryJdbcType;
 
 @Entity
 @Table(name = "productos")
@@ -19,9 +21,9 @@ public class Producto {
     @Column(nullable = false)
     private Double precio;
 
-    // CAMBIO CLAVE: @Lob y byte[] para guardar la imagen real en la DB
     @Lob
     @Column(name = "fotografia", columnDefinition = "BYTEA")
+    @JdbcType(VarbinaryJdbcType.class) // ESTA LÍNEA ES LA SOLUCIÓN
     private byte[] fotografia;
 
     @Column(nullable = false)
@@ -29,7 +31,7 @@ public class Producto {
 
     public Producto() {}
 
-    // Getters y Setters actualizados
+    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
