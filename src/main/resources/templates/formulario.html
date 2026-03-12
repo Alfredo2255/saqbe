@@ -320,7 +320,7 @@
                 
                 <div th:if="${producto.fotografia != null}"
                      style="margin-top: 12px; display: flex; align-items: center; gap: 12px;">
-                    <img th:src="@{'data:image/jpeg;base64,' + ${T(java.util.Base64).getEncoder().encodeToString(producto.fotografia)}}" 
+                    th:src="@{'data:image/jpeg;base64,' + ${producto.fotografiaBase64}}" 
                          class="foto-actual" alt="Foto actual"/>
                     <span style="font-size:0.85rem; color:#888; font-style:italic;">
                         Imagen guardada en el sistema. Sube una nueva para cambiarla.
