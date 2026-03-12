@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.nio.file.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +24,6 @@ public class ProductoController {
 
     @Autowired
     private RegistroRepository registroRepo;
-
-    private static final String UPLOAD_DIR = "uploads/";
 
     @GetMapping
     public String listar(Model model) {
@@ -62,22 +59,22 @@ public class ProductoController {
                 stockAnterior = viejo.getStock();
                 nombreAnterior = viejo.getNombre();
                 precioAnterior = viejo.getPrecio();
+                
+                // Si NO subieron una foto nueva, mantenemos la que ya estaba en la DB
                 if (foto.isEmpty()) {
                     producto.setFotografia(viejo.getFotografia());
                 }
             }
         }
 
+        // CAMBIO IMPORTANTE: Si subieron una foto, la convertimos a bytes para la DB
         if (!foto.isEmpty()) {
-            String nombreFoto = System.currentTimeMillis() + "_" + foto.getOriginalFilename();
-            Path ruta = Paths.get(UPLOAD_DIR + nombreFoto);
-            Files.createDirectories(ruta.getParent());
-            Files.copy(foto.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
-            producto.setFotografia(nombreFoto);
+            producto.setFotografia(foto.getBytes());
         }
 
         Producto guardado = repo.save(producto);
 
+        // Lógica de registros (se mantiene igual)
         if (esNuevo) {
             String detalle = "Nuevo producto creado — Precio: Q" + String.format("%.2f", guardado.getPrecio())
                            + " — Stock inicial: " + guardado.getStock() + " unidades";
@@ -132,14 +129,8 @@ public class ProductoController {
     @GetMapping("/historial")
     public String historial(Model model) {
         List<Registro> registros = registroRepo.findAllByOrderByFechaDesc();
-        long creados   = registros.stream().filter(r -> "CREADO".equals(r.getAccion())).count();
-        long editados  = registros.stream().filter(r -> "EDITADO".equals(r.getAccion())).count();
-        long eliminados= registros.stream().filter(r -> "ELIMINADO".equals(r.getAccion())).count();
         model.addAttribute("registros", registros);
         model.addAttribute("totalAcciones", registros.size());
-        model.addAttribute("creados", creados);
-        model.addAttribute("editados", editados);
-        model.addAttribute("eliminados", eliminados);
         return "historial";
     }
 }
