@@ -14,8 +14,6 @@
         *{margin:0;padding:0;box-sizing:border-box;}
         body{background:var(--cream);color:var(--negro);font-family:'Crimson Pro',Georgia,serif;min-height:100vh;}
         body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 10% 10%,rgba(45,106,79,0.07) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 90% 90%,rgba(160,82,45,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
-
-        /* HEADER */
         header{background:var(--jade-dark);position:relative;}
         .hborder{height:7px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 12px,var(--jade) 12px,var(--jade) 24px,var(--terracota) 24px,var(--terracota) 36px,var(--jade) 36px,var(--jade) 48px);}
         .hcontent{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;flex-wrap:wrap;gap:12px;}
@@ -32,46 +30,34 @@
         .btn-hist:hover{background:rgba(212,160,23,0.15);color:white;}
         .btn-print{background:transparent;color:#aed9c5;border:1.5px solid #aed9c5;}
         .btn-print:hover{background:rgba(174,217,197,0.12);color:white;}
-
-        /* MAIN */
+        .btn-db{background:transparent;color:#86efac;border:1.5px solid #86efac;font-size:0.75rem;}
         main{position:relative;z-index:1;padding:28px 40px;max-width:1400px;margin:0 auto;}
-
-        /* STATS */
         .stats{display:flex;gap:18px;margin-bottom:28px;flex-wrap:wrap;}
         .scard{background:white;border:1px solid var(--cream-dark);border-top:4px solid var(--jade);padding:16px 22px;flex:1;min-width:150px;box-shadow:0 2px 10px var(--sombra);}
         .slabel{font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:#999;}
         .sval{font-family:'Cinzel Decorative',serif;font-size:2rem;color:var(--jade-dark);line-height:1;margin-top:3px;}
-
-        /* GRID */
+        .catalogo-titulo{font-family:'Cinzel Decorative',serif;font-size:0.9rem;letter-spacing:4px;color:var(--jade-dark);text-transform:uppercase;margin-bottom:18px;}
         .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:18px;}
         .card{background:white;border:1px solid var(--cream-dark);overflow:hidden;box-shadow:0 4px 14px var(--sombra);transition:all 0.3s cubic-bezier(.25,.46,.45,.94);position:relative;}
-        
-        /* ESTILO PARA LA FOTO */
         .cfoto{width:100%;height:185px;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;font-size:44px;color:#ccc;overflow:hidden;}
         .cfoto img{width:100%;height:100%;object-fit:cover;}
-
         .cbody{padding:14px 16px;}
         .cnombre{font-family:'Cinzel Decorative',serif;font-size:0.85rem;color:var(--jade-dark);margin:5px 0;}
         .cdesc{font-size:0.86rem;color:#666;font-style:italic;line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
         .cfoot{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:var(--cream);border-top:1px solid var(--cream-dark);}
         .precio{font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--terracota);}
         .precio::before{content:'Q ';}
-        
         .sbadge{display:inline-flex;align-items:center;padding:3px 9px;font-size:0.72rem;font-weight:700;}
         .sagotado{background:#fce4ec;color:#c62828;}
         .sbajo{background:#fff3e0;color:#e65100;}
         .sok{background:#e8f5e9;color:var(--jade);}
-
         .cactions{display:flex;gap:5px;padding:9px 16px;border-top:1px solid var(--cream-dark);}
         .abtn{flex:1;padding:7px;text-align:center;text-decoration:none;font-size:0.8rem;text-transform:uppercase;transition:all 0.2s;cursor:pointer;border:none;}
         .aedit{background:var(--jade);color:white;}
         .adel{background:transparent;color:var(--terracota);border:1px solid var(--terracota);}
-
-        footer{text-align:center;padding:40px;color:#aaa;font-size:0.75rem;letter-spacing:2px;border-top:1px solid var(--cream-dark);margin-top:48px;}
-
-        /* BUSCADOR */
         .barra-busqueda{margin-bottom:20px;}
         .barra-busqueda input{width:100%;max-width:420px;padding:10px 14px;border:1px solid var(--cream-dark);outline:none;}
+        footer{text-align:center;padding:40px;color:#aaa;font-size:0.75rem;letter-spacing:2px;border-top:1px solid var(--cream-dark);margin-top:48px;}
     </style>
 </head>
 <body>
@@ -84,6 +70,10 @@
             <h1>SAQ B'E <em>Sistema de Inventario</em></h1>
         </div>
         <div class="hbtns">
+            <span class="btn btn-db">⬤ Base de Datos Activa</span>
+            <a href="/recursos/creditos" class="btn btn-hist">+ Créditos</a>
+            <a href="/recursos/imprimir" class="btn btn-print">⊞ Imprimir</a>
+            <a href="/recursos/historial" class="btn btn-hist">■ Historial</a>
             <a href="/recursos/nuevo" class="btn btn-nuevo">+ Nuevo Producto</a>
         </div>
     </div>
@@ -91,26 +81,58 @@
 
 <main>
     <div class="stats">
-        <div class="scard"><div class="slabel">Productos</div><div class="sval" th:text="${totalProductos}">0</div></div>
-        <div class="scard"><div class="slabel">Stock</div><div class="sval" th:text="${totalStock}">0</div></div>
+        <div class="scard"><div class="slabel">Total Productos</div><div class="sval" th:text="${totalProductos}">0</div></div>
+        <div class="scard"><div class="slabel">Unidades en Stock</div><div class="sval" th:text="${totalStock}">0</div></div>
+        <div class="scard"><div class="slabel">Movimientos Guardados</div><div class="sval" th:text="${totalRegistros}">0</div></div>
     </div>
+
+    <div class="catalogo-titulo">Catálogo de Productos</div>
 
     <div class="barra-busqueda">
-        <input type="text" id="buscador" placeholder="🔎 Buscar producto..." onkeyup="buscarProducto()">
+        <input type="text" id="buscador" placeholder="🔎 Buscar producto por nombre o descripción..." onkeyup="buscarProducto()">
     </div>
 
-    <div class="grid">
+    <div class="grid" id="gridProductos">
         <div class="card" th:each="p : ${productos}">
-            
             <div class="cfoto">
-                <img th:if="${p.fotografia != null}" 
-                 th:src="'data:image/png;base64,' + ${p.fotografiaBase64}"
+                <img th:if="${p.fotografia != null}"
+                     th:src="'data:image/jpeg;base64,' + ${p.fotografiaBase64}"
                      th:alt="${p.nombre}"/>
-                
                 <span th:unless="${p.fotografia != null}">📦</span>
             </div>
-
             <div class="cbody">
                 <div class="cnombre" th:text="${p.nombre}"></div>
                 <div class="cdesc" th:text="${p.descripcion}"></div>
             </div>
+            <div class="cfoot">
+                <span class="precio" th:text="${p.precio}"></span>
+                <span th:if="${p.stock == 0}" class="sbadge sagotado">✗ Agotado</span>
+                <span th:if="${p.stock > 0 and p.stock <= 3}" class="sbadge sbajo">▲ <span th:text="${p.stock}"></span> uds.</span>
+                <span th:if="${p.stock > 3}" class="sbadge sok">✔ <span th:text="${p.stock}"></span> uds.</span>
+            </div>
+            <div class="cactions">
+                <a th:href="@{/recursos/editar/{id}(id=${p.id})}" class="abtn aedit">— Editar</a>
+                <span> ◇ </span>
+                <a th:href="@{/recursos/eliminar/{id}(id=${p.id})}" class="abtn adel"
+                   onclick="return confirm('¿Eliminar este producto?')">✕ Eliminar</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>Inventario SAQ B'E • Guatemala</footer>
+
+<script>
+function buscarProducto() {
+    const texto = document.getElementById('buscador').value.toLowerCase();
+    const cards = document.querySelectorAll('#gridProductos .card');
+    cards.forEach(card => {
+        const nombre = card.querySelector('.cnombre')?.textContent.toLowerCase() || '';
+        const desc = card.querySelector('.cdesc')?.textContent.toLowerCase() || '';
+        card.style.display = (nombre.includes(texto) || desc.includes(texto)) ? '' : 'none';
+    });
+}
+</script>
+
+</body>
+</html>
