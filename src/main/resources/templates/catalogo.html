@@ -1,261 +1,243 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>SAQ B'E — Catálogo</title>
+    <title>SAQ B'E — Catálogo</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet"/>
 
-<style>
+    <style>
+        :root{
+            --jade:#2D6A4F;
+            --jade-dark:#1B4332;
+            --gold:#D4A017;
+            --terracota:#A0522D;
+            --cream:#FAF3E0;
+            --negro:#1A1108;
+        }
 
-:root{
---jade:#2D6A4F;
---jade-dark:#1B4332;
---gold:#D4A017;
---terracota:#A0522D;
---cream:#FAF3E0;
---negro:#1A1108;
-}
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+        body{
+            background:var(--cream);
+            font-family:'Crimson Pro',serif;
+            color:var(--negro);
+        }
 
-body{
-background:var(--cream);
-font-family:'Crimson Pro',serif;
-color:var(--negro);
-}
+        /* HEADER */
+        header{
+            background:var(--jade-dark);
+            color:white;
+            text-align:center;
+            position:relative;
+        }
 
-/* HEADER */
+        .hborder{
+            height:7px;
+            background:
+            repeating-linear-gradient(
+                90deg,
+                var(--gold) 0,
+                var(--gold) 12px,
+                var(--jade) 12px,
+                var(--jade) 24px,
+                var(--terracota) 24px,
+                var(--terracota) 36px,
+                var(--jade) 36px,
+                var(--jade) 48px
+            );
+        }
 
-header{
-background:var(--jade-dark);
-color:white;
-text-align:center;
-position:relative;
-}
+        .header-content{
+            padding:22px;
+        }
 
-.hborder{
-height:7px;
-background:
-repeating-linear-gradient(
-90deg,
-var(--gold) 0,
-var(--gold) 12px,
-var(--jade) 12px,
-var(--jade) 24px,
-var(--terracota) 24px,
-var(--terracota) 36px,
-var(--jade) 36px,
-var(--jade) 48px
-);
-}
+        header h1{
+            font-family:'Cinzel Decorative',serif;
+            letter-spacing:4px;
+        }
 
-.header-content{
-padding:22px;
-}
+        header p{
+            font-size:0.9rem;
+            opacity:0.85;
+            margin-top:4px;
+        }
 
-header h1{
-font-family:'Cinzel Decorative',serif;
-letter-spacing:4px;
-}
+        main{
+            max-width:1200px;
+            margin:auto;
+            padding:30px;
+        }
 
-header p{
-font-size:0.9rem;
-opacity:0.85;
-margin-top:4px;
-}
+        .titulo{
+            font-family:'Cinzel Decorative',serif;
+            letter-spacing:4px;
+            margin-bottom:25px;
+            color:var(--jade);
+        }
 
-main{
-max-width:1200px;
-margin:auto;
-padding:30px;
-}
+        .grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+            gap:20px;
+        }
 
-.titulo{
-font-family:'Cinzel Decorative',serif;
-letter-spacing:4px;
-margin-bottom:25px;
-color:var(--jade);
-}
+        /* CARD */
+        .card{
+            background:white;
+            border:1px solid #eee;
+            box-shadow:0 5px 20px rgba(0,0,0,0.1);
+            transition:0.3s;
+            overflow:hidden;
+            position:relative;
+        }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-gap:20px;
-}
+        .card::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            height:3px;
+            background:linear-gradient(90deg,var(--jade),var(--gold),var(--terracota));
+        }
 
-/* CARD */
+        .card:hover{
+            transform:translateY(-5px);
+        }
 
-.card{
-background:white;
-border:1px solid #eee;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
-transition:0.3s;
-overflow:hidden;
-position:relative;
-}
+        .foto{
+            width:100%;
+            height:180px;
+            background:#eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.card::before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-right:0;
-height:3px;
-background:linear-gradient(90deg,var(--jade),var(--gold),var(--terracota));
-}
+        .foto img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
 
-.card:hover{
-transform:translateY(-5px);
-}
+        .body{
+            padding:15px;
+        }
 
-.foto{
-width:100%;
-height:180px;
-background:#eee;
-}
+        .nombre{
+            font-family:'Cinzel Decorative',serif;
+            color:var(--jade-dark);
+            margin-bottom:6px;
+        }
 
-.foto img{
-width:100%;
-height:180px;
-object-fit:cover;
-}
+        .desc{
+            font-size:0.9rem;
+            color:#666;
+            margin-bottom:10px;
+        }
 
-.body{
-padding:15px;
-}
+        .precio{
+            font-family:'Cinzel Decorative',serif;
+            color:var(--terracota);
+            font-size:1.1rem;
+        }
 
-.nombre{
-font-family:'Cinzel Decorative',serif;
-color:var(--jade-dark);
-margin-bottom:6px;
-}
+        .precio::before{
+            content:"Q ";
+            font-size:0.7rem;
+        }
 
-.desc{
-font-size:0.9rem;
-color:#666;
-margin-bottom:10px;
-}
+        .stock{
+            margin-top:8px;
+            font-size:0.8rem;
+            color:#666;
+        }
 
-.precio{
-font-family:'Cinzel Decorative',serif;
-color:var(--terracota);
-font-size:1.1rem;
-}
+        /* BOTON */
+        .btn{
+            display:block;
+            margin-top:12px;
+            text-align:center;
+            padding:9px;
+            background:var(--jade);
+            color:white;
+            text-decoration:none;
+            font-size:0.85rem;
+            letter-spacing:1px;
+            transition:0.2s;
+        }
 
-.precio::before{
-content:"Q ";
-font-size:0.7rem;
-}
+        .btn:hover{
+            background:var(--jade-dark);
+        }
 
-.stock{
-margin-top:8px;
-font-size:0.8rem;
-color:#666;
-}
+        .vacio{
+            text-align:center;
+            padding:60px;
+            color:#999;
+        }
 
-/* BOTON */
-
-.btn{
-display:block;
-margin-top:12px;
-text-align:center;
-padding:9px;
-background:var(--jade);
-color:white;
-text-decoration:none;
-font-size:0.85rem;
-letter-spacing:1px;
-transition:0.2s;
-}
-
-.btn:hover{
-background:var(--jade-dark);
-}
-
-.vacio{
-text-align:center;
-padding:60px;
-color:#999;
-}
-
-footer{
-text-align:center;
-margin-top:40px;
-padding:25px;
-font-size:0.8rem;
-color:#aaa;
-}
-
-</style>
+        footer{
+            text-align:center;
+            margin-top:40px;
+            padding:25px;
+            font-size:0.8rem;
+            color:#aaa;
+        }
+    </style>
 </head>
 
 <body>
+    <header>
+        <div class="hborder"></div>
+        <div class="header-content">
+            <h1>SAQ B'E</h1>
+            <p>Catálogo de productos</p>
+        </div>
+    </header>
 
-<header>
+    <main>
+        <div class="titulo">Productos Disponibles</div>
 
-<div class="hborder"></div>
+        <div class="grid">
+            <div th:if="${#lists.isEmpty(productos)}" class="vacio">
+                No hay productos disponibles
+            </div>
 
-<div class="header-content">
-<h1>SAQ B'E</h1>
-<p>Catálogo de productos</p>
-</div>
+            <div class="card" th:each="p : ${productos}">
+                <div class="foto">
+                    <img th:if="${p.fotografia != null}" 
+                         th:src="@{'data:image/jpeg;base64,' + ${T(java.util.Base64).getEncoder().encodeToString(p.fotografia)}}" 
+                         alt="Imagen del producto"/>
+                    
+                    <img th:unless="${p.fotografia != null}" 
+                         src="https://via.placeholder.com/180?text=Sin+Imagen" 
+                         alt="Sin imagen"/>
+                </div>
 
-</header>
+                <div class="body">
+                    <div class="nombre" th:text="${p.nombre}"></div>
+                    <div class="desc" th:text="${p.descripcion}"></div>
+                    <div class="precio" th:text="${#numbers.formatDecimal(p.precio,1,2)}"></div>
+                    <div class="stock" th:text="'Disponibles: ' + ${p.stock}"></div>
 
-<main>
+                    <a class="btn" th:href="@{'https://wa.me/?text=Hola%20me%20interesa%20el%20producto%20' + ${p.nombre}}">
+                        Consultar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
 
-<div class="titulo">Productos Disponibles</div>
-
-<div class="grid">
-
-<div th:if="${#lists.isEmpty(productos)}" class="vacio">
-No hay productos disponibles
-</div>
-
-<div class="card" th:each="p : ${productos}">
-
-<div class="foto">
-
-<img th:if="${p.fotografia != null and !p.fotografia.isEmpty()}"
-th:src="@{'/uploads/' + ${p.fotografia}}"/>
-
-</div>
-
-<div class="body">
-
-<div class="nombre" th:text="${p.nombre}"></div>
-
-<div class="desc" th:text="${p.descripcion}"></div>
-
-<div class="precio"
-th:text="${#numbers.formatDecimal(p.precio,1,2)}"></div>
-
-<div class="stock"
-th:text="'Disponibles: ' + ${p.stock}"></div>
-
-<a class="btn"
-th:href="@{'https://wa.me/?text=Hola%20me%20interesa%20el%20producto%20' + ${p.nombre}}">
-Consultar
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</main>
-
-<footer>
-SAQ B'E — Catálogo de productos
-</footer>
-
+    <footer>
+        SAQ B'E — Catálogo de productos
+    </footer>
 </body>
 </html>
