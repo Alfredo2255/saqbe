@@ -19,13 +19,17 @@ public class Producto {
     @Column(nullable = false)
     private Double precio;
 
-    private String fotografia;
+    // CAMBIO CLAVE: @Lob y byte[] para guardar la imagen real en la DB
+    @Lob
+    @Column(name = "fotografia", columnDefinition = "BYTEA")
+    private byte[] fotografia;
 
     @Column(nullable = false)
     private Integer stock;
 
     public Producto() {}
 
+    // Getters y Setters actualizados
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -38,8 +42,8 @@ public class Producto {
     public Double getPrecio() { return precio; }
     public void setPrecio(Double precio) { this.precio = precio; }
 
-    public String getFotografia() { return fotografia; }
-    public void setFotografia(String fotografia) { this.fotografia = fotografia; }
+    public byte[] getFotografia() { return fotografia; }
+    public void setFotografia(byte[] fotografia) { this.fotografia = fotografia; }
 
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
