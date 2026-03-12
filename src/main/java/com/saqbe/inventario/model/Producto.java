@@ -49,4 +49,8 @@ public class Producto {
 
     public Integer getStock() { return stock; }
     public void setStock(Integer stock) { this.stock = stock; }
+    public String getFotografiaBase64() {
+        if (fotografia == null) return null;
+        return java.util.Base64.getEncoder().encodeToString(fotografia);
+    }
 }
