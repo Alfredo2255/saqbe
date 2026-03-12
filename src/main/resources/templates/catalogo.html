@@ -214,7 +214,7 @@
             <div class="card" th:each="p : ${productos}">
                 <div class="foto">
                     <img th:if="${p.fotografia != null}" 
-                         th:src="@{'data:image/jpeg;base64,' + ${T(java.util.Base64).getEncoder().encodeToString(p.fotografia)}}" 
+                         th:src="@{'data:image/jpeg;base64,' + ${p.fotografiaBase64}}" 
                          alt="Imagen del producto"/>
                     
                     <img th:unless="${p.fotografia != null}" 
